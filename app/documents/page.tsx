@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+// import { useToast } from "@/hooks/use-toast"
 import {
   FileText,
   Users,
@@ -20,8 +20,8 @@ import {
   Upload,
   Search,
   File,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 
 const documents = [
   {
@@ -64,25 +64,25 @@ const documents = [
     status: "Approved",
     category: "Geotechnical",
   },
-]
+];
 
 export default function DocumentsPage() {
-  const [documentList, setDocumentList] = useState(documents)
-  const [searchTerm, setSearchTerm] = useState("")
-  const { toast } = useToast()
+  const [documentList, setDocumentList] = useState(documents);
+  const [searchTerm, setSearchTerm] = useState("");
+  // const { toast } = useToast()
 
   const handleDocumentAction = (action: string, document: any) => {
-    toast({
-      title: `${action} Document`,
-      description: `${action} action for ${document.name}`,
-    })
-  }
+    // toast({
+    //   title: `${action} Document`,
+    //   description: `${action} action for ${document.name}`,
+    // })
+  };
 
   const filteredDocuments = documentList.filter(
     (document) =>
       document.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       document.project.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -93,7 +93,9 @@ export default function DocumentsPage() {
             <span className="text-blue-600 font-bold text-sm">N</span>
           </div>
           <div>
-            <h1 className="font-semibold">National Water Harvesting & Storage Authority</h1>
+            <h1 className="font-semibold">
+              National Water Harvesting & Storage Authority
+            </h1>
             <p className="text-xs text-blue-100">Project Management System</p>
           </div>
         </div>
@@ -111,49 +113,73 @@ export default function DocumentsPage() {
           <nav className="p-4">
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <Home className="h-4 w-4" />
                   <span className="text-sm">Dashboard</span>
                 </Link>
               </li>
               <li>
-                <Link href="/projects" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/projects"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Large Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/small-dams" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/small-dams"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Small Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/experts" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/experts"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <UserCheck className="h-4 w-4" />
                   <span className="text-sm">Expert Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/contracts" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/contracts"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <ClipboardList className="h-4 w-4" />
                   <span className="text-sm">Contract Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/documents" className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600">
+                <Link
+                  href="/documents"
+                  className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600"
+                >
                   <FileText className="h-4 w-4" />
                   <span className="text-sm">Documents</span>
                 </Link>
               </li>
               <li>
-                <Link href="/reports" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/reports"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <BarChart3 className="h-4 w-4" />
                   <span className="text-sm">Reports</span>
                 </Link>
               </li>
               <li>
-                <Link href="/settings" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/settings"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <Settings className="h-4 w-4" />
                   <span className="text-sm">Settings</span>
                 </Link>
@@ -165,7 +191,9 @@ export default function DocumentsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Document Management</h1>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Document Management
+            </h1>
             <p className="text-gray-600">Manage project documents and files</p>
           </div>
 
@@ -191,7 +219,10 @@ export default function DocumentsPage() {
           {/* Documents Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredDocuments.map((document) => (
-              <Card key={document.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={document.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex items-start justify-between mb-4">
                     <div className="flex items-center space-x-3">
@@ -199,7 +230,9 @@ export default function DocumentsPage() {
                         <File className="h-5 w-5 text-blue-600" />
                       </div>
                       <div>
-                        <h3 className="font-semibold text-sm">{document.name}</h3>
+                        <h3 className="font-semibold text-sm">
+                          {document.name}
+                        </h3>
                         <p className="text-xs text-gray-600">
                           {document.type} • {document.size}
                         </p>
@@ -231,7 +264,9 @@ export default function DocumentsPage() {
 
                     <div className="text-sm">
                       <p className="text-gray-600">Upload Date</p>
-                      <p className="font-medium">{new Date(document.uploadDate).toLocaleDateString()}</p>
+                      <p className="font-medium">
+                        {new Date(document.uploadDate).toLocaleDateString()}
+                      </p>
                     </div>
 
                     <div className="flex space-x-2 pt-3">
@@ -244,7 +279,13 @@ export default function DocumentsPage() {
                         <Eye className="h-3 w-3 mr-1" />
                         View
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleDocumentAction("Download", document)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() =>
+                          handleDocumentAction("Download", document)
+                        }
+                      >
                         <Download className="h-3 w-3" />
                       </Button>
                     </div>
@@ -256,5 +297,5 @@ export default function DocumentsPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }

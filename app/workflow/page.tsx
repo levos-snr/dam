@@ -141,10 +141,10 @@ export default function WorkflowDesigner() {
 
           if (step.id < steps.length) {
             setSelectedStep(steps.find((s) => s.id === step.id + 1) || step);
-            toast({
-              title: "Phase Completed!",
-              description: `${step.name} completed. Moving to next phase.`,
-            });
+            // toast({
+            //   title: "Phase Completed!",
+            //   description: `${step.name} completed. Moving to next phase.`,
+            // });
           }
         }, 1500);
       }
@@ -155,18 +155,18 @@ export default function WorkflowDesigner() {
       setSteps(updatedSteps);
       setSelectedStep({ ...step, status: "current", progress: 10 });
 
-      toast({
-        title: "Phase Started",
-        description: `${step.name} has been initiated.`,
-      });
+      // toast({
+      //   title: "Phase Started",
+      //   description: `${step.name} has been initiated.`,
+      // });
     }
   };
 
   const handleDocumentAction = (action: string) => {
-    toast({
-      title: `${action} Action`,
-      description: `${action} for ${selectedStep.name}`,
-    });
+    // toast({
+    //   title: `${action} Action`,
+    //   description: `${action} for ${selectedStep.name}`,
+    // });
   };
 
   return (

@@ -1,11 +1,11 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+// import { useToast } from "@/hooks/use-toast"
 import {
   FileText,
   Users,
@@ -20,8 +20,8 @@ import {
   Edit,
   Calendar,
   DollarSign,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 
 const contracts = [
   {
@@ -60,25 +60,25 @@ const contracts = [
     progress: 100,
     type: "Supply",
   },
-]
+];
 
 export default function ContractsPage() {
-  const [contractList, setContractList] = useState(contracts)
-  const [searchTerm, setSearchTerm] = useState("")
-  const { toast } = useToast()
+  const [contractList, setContractList] = useState(contracts);
+  const [searchTerm, setSearchTerm] = useState("");
+  // const { toast } = useToast()
 
   const handleContractAction = (action: string, contract: any) => {
-    toast({
-      title: `${action} Contract`,
-      description: `${action} action for ${contract.title}`,
-    })
-  }
+    // toast({
+    //   title: `${action} Contract`,
+    //   description: `${action} action for ${contract.title}`,
+    // })
+  };
 
   const filteredContracts = contractList.filter(
     (contract) =>
       contract.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contract.contractor.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -89,7 +89,9 @@ export default function ContractsPage() {
             <span className="text-blue-600 font-bold text-sm">N</span>
           </div>
           <div>
-            <h1 className="font-semibold">National Water Harvesting & Storage Authority</h1>
+            <h1 className="font-semibold">
+              National Water Harvesting & Storage Authority
+            </h1>
             <p className="text-xs text-blue-100">Project Management System</p>
           </div>
         </div>
@@ -107,49 +109,73 @@ export default function ContractsPage() {
           <nav className="p-4">
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <Home className="h-4 w-4" />
                   <span className="text-sm">Dashboard</span>
                 </Link>
               </li>
               <li>
-                <Link href="/projects" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/projects"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Large Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/small-dams" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/small-dams"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Small Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/experts" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/experts"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <UserCheck className="h-4 w-4" />
                   <span className="text-sm">Expert Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/contracts" className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600">
+                <Link
+                  href="/contracts"
+                  className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600"
+                >
                   <ClipboardList className="h-4 w-4" />
                   <span className="text-sm">Contract Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/documents" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/documents"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FileText className="h-4 w-4" />
                   <span className="text-sm">Documents</span>
                 </Link>
               </li>
               <li>
-                <Link href="/reports" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/reports"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <BarChart3 className="h-4 w-4" />
                   <span className="text-sm">Reports</span>
                 </Link>
               </li>
               <li>
-                <Link href="/settings" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/settings"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <Settings className="h-4 w-4" />
                   <span className="text-sm">Settings</span>
                 </Link>
@@ -161,8 +187,12 @@ export default function ContractsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Contract Management</h1>
-            <p className="text-gray-600">Manage project contracts and agreements</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Contract Management
+            </h1>
+            <p className="text-gray-600">
+              Manage project contracts and agreements
+            </p>
           </div>
 
           {/* Search and Actions */}
@@ -183,12 +213,19 @@ export default function ContractsPage() {
           {/* Contracts Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             {filteredContracts.map((contract) => (
-              <Card key={contract.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={contract.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">{contract.title}</h3>
-                      <p className="text-sm text-gray-600">{contract.contractor}</p>
+                      <h3 className="font-semibold text-lg mb-1">
+                        {contract.title}
+                      </h3>
+                      <p className="text-sm text-gray-600">
+                        {contract.contractor}
+                      </p>
                     </div>
                     <Badge
                       variant={
@@ -235,7 +272,9 @@ export default function ContractsPage() {
                     <div>
                       <div className="flex justify-between text-sm mb-1">
                         <span className="text-gray-600">Progress</span>
-                        <span className="font-medium">{contract.progress}%</span>
+                        <span className="font-medium">
+                          {contract.progress}%
+                        </span>
                       </div>
                       <div className="w-full bg-gray-200 rounded-full h-2">
                         <div
@@ -246,7 +285,9 @@ export default function ContractsPage() {
                     </div>
 
                     <div className="pt-3 border-t">
-                      <p className="text-xs text-gray-600 mb-1">Related Project</p>
+                      <p className="text-xs text-gray-600 mb-1">
+                        Related Project
+                      </p>
                       <p className="text-sm font-medium">{contract.project}</p>
                     </div>
 
@@ -278,5 +319,5 @@ export default function ContractsPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }
