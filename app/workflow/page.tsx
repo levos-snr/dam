@@ -1,13 +1,23 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Progress } from "@/components/ui/progress"
-import { useToast } from "@/hooks/use-toast"
-import { ArrowRight, CheckCircle, Clock, AlertCircle, FileText, Users, Settings, Play, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { useState } from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Progress } from "@/components/ui/progress";
+// import { useToast } from "@/hooks/use-toast"
+import {
+  ArrowRight,
+  CheckCircle,
+  Clock,
+  AlertCircle,
+  FileText,
+  Users,
+  Settings,
+  Play,
+  ArrowLeft,
+} from "lucide-react";
+import Link from "next/link";
 
 const workflowSteps = [
   {
@@ -15,7 +25,11 @@ const workflowSteps = [
     name: "Pre-Feasibility Study",
     description: "Initial assessment and site selection",
     duration: "3-6 months",
-    deliverables: ["Site Visit Report", "Preliminary Assessment", "Stakeholder Consultation"],
+    deliverables: [
+      "Site Visit Report",
+      "Preliminary Assessment",
+      "Stakeholder Consultation",
+    ],
     experts: ["Project Engineer", "Surveyor", "Environmental Expert"],
     status: "completed",
     progress: 100,
@@ -26,7 +40,12 @@ const workflowSteps = [
     description: "Comprehensive technical and economic analysis",
     duration: "6-12 months",
     deliverables: ["Feasibility Report", "ESIA Report", "Economic Analysis"],
-    experts: ["Project Engineer", "Hydrologist", "Geotechnical Engineer", "Environmental Expert"],
+    experts: [
+      "Project Engineer",
+      "Hydrologist",
+      "Geotechnical Engineer",
+      "Environmental Expert",
+    ],
     status: "completed",
     progress: 100,
   },
@@ -45,7 +64,11 @@ const workflowSteps = [
     name: "Final Design",
     description: "Detailed engineering design and construction documents",
     duration: "6-12 months",
-    deliverables: ["Final Design Report", "Construction Drawings", "Technical Specifications"],
+    deliverables: [
+      "Final Design Report",
+      "Construction Drawings",
+      "Technical Specifications",
+    ],
     experts: ["Project Engineer", "All Technical Experts"],
     status: "current",
     progress: 75,
@@ -55,7 +78,11 @@ const workflowSteps = [
     name: "Construction",
     description: "Physical construction of the dam",
     duration: "36-60 months",
-    deliverables: ["Progress Reports", "Quality Reports", "Completion Certificates"],
+    deliverables: [
+      "Progress Reports",
+      "Quality Reports",
+      "Completion Certificates",
+    ],
     experts: ["Construction Manager", "Site Engineer", "Quality Controller"],
     status: "pending",
     progress: 0,
@@ -65,29 +92,40 @@ const workflowSteps = [
     name: "Commissioning",
     description: "Testing and handover of completed dam",
     duration: "6-12 months",
-    deliverables: ["Commissioning Report", "O&M Manual", "Handover Certificate"],
+    deliverables: [
+      "Commissioning Report",
+      "O&M Manual",
+      "Handover Certificate",
+    ],
     experts: ["Project Engineer", "Operations Team"],
     status: "pending",
     progress: 0,
   },
-]
+];
 
 export default function WorkflowDesigner() {
-  const [selectedStep, setSelectedStep] = useState(workflowSteps[3]) // Current step
-  const [steps, setSteps] = useState(workflowSteps)
-  const { toast } = useToast()
+  const [selectedStep, setSelectedStep] = useState(workflowSteps[3]); // Current step
+  const [steps, setSteps] = useState(workflowSteps);
+  // const { toast } = useToast()
 
   const handleStepAction = (action: string, step: any) => {
     if (action === "continue" && step.status === "current") {
       // Advance current step
-      const updatedSteps = steps.map((s) => (s.id === step.id ? { ...s, progress: Math.min(s.progress + 10, 100) } : s))
-      setSteps(updatedSteps)
-      setSelectedStep((prev) => ({ ...prev, progress: Math.min(prev.progress + 10, 100) }))
+      const updatedSteps = steps.map((s) =>
+        s.id === step.id
+          ? { ...s, progress: Math.min(s.progress + 10, 100) }
+          : s,
+      );
+      setSteps(updatedSteps);
+      setSelectedStep((prev) => ({
+        ...prev,
+        progress: Math.min(prev.progress + 10, 100),
+      }));
 
-      toast({
-        title: "Step Advanced",
-        description: `${step.name} progress updated to ${Math.min(step.progress + 10, 100)}%`,
-      })
+      // toast({
+      //   title: "Step Advanced",
+      //   description: `${step.name} progress updated to ${Math.min(step.progress + 10, 100)}%`,
+      // })
 
       // If step is completed, move to next
       if (step.progress + 10 >= 100) {
@@ -98,44 +136,50 @@ export default function WorkflowDesigner() {
               : s.id === step.id + 1
                 ? { ...s, status: "current", progress: 10 }
                 : s,
-          )
-          setSteps(nextStepUpdates)
+          );
+          setSteps(nextStepUpdates);
 
           if (step.id < steps.length) {
-            setSelectedStep(steps.find((s) => s.id === step.id + 1) || step)
+            setSelectedStep(steps.find((s) => s.id === step.id + 1) || step);
             toast({
               title: "Phase Completed!",
               description: `${step.name} completed. Moving to next phase.`,
-            })
+            });
           }
-        }, 1500)
+        }, 1500);
       }
     } else if (action === "start" && step.status === "pending") {
-      const updatedSteps = steps.map((s) => (s.id === step.id ? { ...s, status: "current", progress: 10 } : s))
-      setSteps(updatedSteps)
-      setSelectedStep({ ...step, status: "current", progress: 10 })
+      const updatedSteps = steps.map((s) =>
+        s.id === step.id ? { ...s, status: "current", progress: 10 } : s,
+      );
+      setSteps(updatedSteps);
+      setSelectedStep({ ...step, status: "current", progress: 10 });
 
       toast({
         title: "Phase Started",
         description: `${step.name} has been initiated.`,
-      })
+      });
     }
-  }
+  };
 
   const handleDocumentAction = (action: string) => {
     toast({
       title: `${action} Action`,
       description: `${action} for ${selectedStep.name}`,
-    })
-  }
+    });
+  };
 
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <div className="max-w-7xl mx-auto">
         <div className="mb-6 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-bold mb-2">Large Dam Project Workflow Designer</h1>
-            <p className="text-gray-600">Design and manage the complete workflow for large dam projects</p>
+            <h1 className="text-3xl font-bold mb-2">
+              Large Dam Project Workflow Designer
+            </h1>
+            <p className="text-gray-600">
+              Design and manage the complete workflow for large dam projects
+            </p>
           </div>
           <Link href="/">
             <Button variant="outline">
@@ -200,11 +244,18 @@ export default function WorkflowDesigner() {
                               {step.status}
                             </Badge>
                           </div>
-                          <p className="text-sm text-gray-600 mb-2">{step.description}</p>
+                          <p className="text-sm text-gray-600 mb-2">
+                            {step.description}
+                          </p>
                           <div className="flex items-center justify-between">
-                            <span className="text-xs text-gray-500">Duration: {step.duration}</span>
+                            <span className="text-xs text-gray-500">
+                              Duration: {step.duration}
+                            </span>
                             <div className="flex items-center space-x-2">
-                              <Progress value={step.progress} className="w-20 h-2" />
+                              <Progress
+                                value={step.progress}
+                                className="w-20 h-2"
+                              />
                               <span className="text-xs">{step.progress}%</span>
                             </div>
                           </div>
@@ -235,19 +286,28 @@ export default function WorkflowDesigner() {
               <CardContent className="space-y-4">
                 <div>
                   <h4 className="font-medium mb-2">Description</h4>
-                  <p className="text-sm text-gray-600">{selectedStep.description}</p>
+                  <p className="text-sm text-gray-600">
+                    {selectedStep.description}
+                  </p>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2">Duration</h4>
-                  <p className="text-sm text-gray-600">{selectedStep.duration}</p>
+                  <p className="text-sm text-gray-600">
+                    {selectedStep.duration}
+                  </p>
                 </div>
 
                 <div>
                   <h4 className="font-medium mb-2">Progress</h4>
                   <div className="flex items-center space-x-2">
-                    <Progress value={selectedStep.progress} className="flex-1" />
-                    <span className="text-sm font-medium">{selectedStep.progress}%</span>
+                    <Progress
+                      value={selectedStep.progress}
+                      className="flex-1"
+                    />
+                    <span className="text-sm font-medium">
+                      {selectedStep.progress}%
+                    </span>
                   </div>
                 </div>
 
@@ -255,7 +315,10 @@ export default function WorkflowDesigner() {
                   <h4 className="font-medium mb-2">Key Deliverables</h4>
                   <ul className="space-y-1">
                     {selectedStep.deliverables.map((deliverable, index) => (
-                      <li key={index} className="text-sm text-gray-600 flex items-center">
+                      <li
+                        key={index}
+                        className="text-sm text-gray-600 flex items-center"
+                      >
                         <CheckCircle className="h-3 w-3 mr-2 text-green-500" />
                         {deliverable}
                       </li>
@@ -296,11 +359,19 @@ export default function WorkflowDesigner() {
                         ? "Continue"
                         : "Start Phase"}
                   </Button>
-                  <Button variant="outline" className="w-full" onClick={() => handleDocumentAction("View Documents")}>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleDocumentAction("View Documents")}
+                  >
                     <FileText className="h-4 w-4 mr-2" />
                     View Documents
                   </Button>
-                  <Button variant="outline" className="w-full" onClick={() => handleDocumentAction("Assign Experts")}>
+                  <Button
+                    variant="outline"
+                    className="w-full"
+                    onClick={() => handleDocumentAction("Assign Experts")}
+                  >
                     <Users className="h-4 w-4 mr-2" />
                     Assign Experts
                   </Button>
@@ -344,5 +415,5 @@ export default function WorkflowDesigner() {
         </div>
       </div>
     </div>
-  )
+  );
 }

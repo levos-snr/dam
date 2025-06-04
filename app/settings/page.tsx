@@ -1,12 +1,12 @@
-"use client"
+"use client";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import { Switch } from "@/components/ui/switch"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+// import { useToast } from "@/hooks/use-toast"
 import {
   FileText,
   Users,
@@ -21,8 +21,8 @@ import {
   Bell,
   Shield,
   Database,
-} from "lucide-react"
-import Link from "next/link"
+} from "lucide-react";
+import Link from "next/link";
 
 export default function SettingsPage() {
   const [settings, setSettings] = useState({
@@ -32,15 +32,15 @@ export default function SettingsPage() {
     darkMode: false,
     language: "English",
     timezone: "EAT",
-  })
-  const { toast } = useToast()
+  });
+  // const { toast } = useToast()
 
   const handleSaveSettings = () => {
-    toast({
-      title: "Settings Saved",
-      description: "Your preferences have been updated successfully.",
-    })
-  }
+    // toast({
+    //   title: "Settings Saved",
+    //   description: "Your preferences have been updated successfully.",
+    // })
+  };
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -51,7 +51,9 @@ export default function SettingsPage() {
             <span className="text-blue-600 font-bold text-sm">N</span>
           </div>
           <div>
-            <h1 className="font-semibold">National Water Harvesting & Storage Authority</h1>
+            <h1 className="font-semibold">
+              National Water Harvesting & Storage Authority
+            </h1>
             <p className="text-xs text-blue-100">Project Management System</p>
           </div>
         </div>
@@ -69,49 +71,73 @@ export default function SettingsPage() {
           <nav className="p-4">
             <ul className="space-y-2">
               <li>
-                <Link href="/" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <Home className="h-4 w-4" />
                   <span className="text-sm">Dashboard</span>
                 </Link>
               </li>
               <li>
-                <Link href="/projects" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/projects"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Large Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/small-dams" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/small-dams"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FolderOpen className="h-4 w-4" />
                   <span className="text-sm">Small Dam Projects</span>
                 </Link>
               </li>
               <li>
-                <Link href="/experts" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/experts"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <UserCheck className="h-4 w-4" />
                   <span className="text-sm">Expert Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/contracts" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/contracts"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <ClipboardList className="h-4 w-4" />
                   <span className="text-sm">Contract Management</span>
                 </Link>
               </li>
               <li>
-                <Link href="/documents" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/documents"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <FileText className="h-4 w-4" />
                   <span className="text-sm">Documents</span>
                 </Link>
               </li>
               <li>
-                <Link href="/reports" className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50">
+                <Link
+                  href="/reports"
+                  className="flex items-center space-x-3 p-2 rounded hover:bg-gray-50"
+                >
                   <BarChart3 className="h-4 w-4" />
                   <span className="text-sm">Reports</span>
                 </Link>
               </li>
               <li>
-                <Link href="/settings" className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600">
+                <Link
+                  href="/settings"
+                  className="flex items-center space-x-3 p-2 rounded bg-blue-50 text-blue-600"
+                >
                   <Settings className="h-4 w-4" />
                   <span className="text-sm">Settings</span>
                 </Link>
@@ -123,8 +149,12 @@ export default function SettingsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">System Settings</h1>
-            <p className="text-gray-600">Manage your system preferences and configurations</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              System Settings
+            </h1>
+            <p className="text-gray-600">
+              Manage your system preferences and configurations
+            </p>
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -142,7 +172,11 @@ export default function SettingsPage() {
                   </div>
                   <div>
                     <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" type="email" defaultValue="manager@nwhsa.go.ke" />
+                    <Input
+                      id="email"
+                      type="email"
+                      defaultValue="manager@nwhsa.go.ke"
+                    />
                   </div>
                   <div>
                     <Label htmlFor="department">Department</Label>
@@ -165,7 +199,9 @@ export default function SettingsPage() {
                     <Switch
                       id="notifications"
                       checked={settings.notifications}
-                      onCheckedChange={(checked) => setSettings({ ...settings, notifications: checked })}
+                      onCheckedChange={(checked) =>
+                        setSettings({ ...settings, notifications: checked })
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -173,7 +209,9 @@ export default function SettingsPage() {
                     <Switch
                       id="email-alerts"
                       checked={settings.emailAlerts}
-                      onCheckedChange={(checked) => setSettings({ ...settings, emailAlerts: checked })}
+                      onCheckedChange={(checked) =>
+                        setSettings({ ...settings, emailAlerts: checked })
+                      }
                     />
                   </div>
                   <div className="flex items-center justify-between">
@@ -181,7 +219,9 @@ export default function SettingsPage() {
                     <Switch
                       id="auto-backup"
                       checked={settings.autoBackup}
-                      onCheckedChange={(checked) => setSettings({ ...settings, autoBackup: checked })}
+                      onCheckedChange={(checked) =>
+                        setSettings({ ...settings, autoBackup: checked })
+                      }
                     />
                   </div>
                 </div>
@@ -229,14 +269,19 @@ export default function SettingsPage() {
                   </div>
                   <div>
                     <Label htmlFor="timezone">Timezone</Label>
-                    <Input id="timezone" defaultValue="East Africa Time (EAT)" />
+                    <Input
+                      id="timezone"
+                      defaultValue="East Africa Time (EAT)"
+                    />
                   </div>
                   <div className="flex items-center justify-between">
                     <Label htmlFor="dark-mode">Dark Mode</Label>
                     <Switch
                       id="dark-mode"
                       checked={settings.darkMode}
-                      onCheckedChange={(checked) => setSettings({ ...settings, darkMode: checked })}
+                      onCheckedChange={(checked) =>
+                        setSettings({ ...settings, darkMode: checked })
+                      }
                     />
                   </div>
                 </div>
@@ -246,7 +291,10 @@ export default function SettingsPage() {
 
           {/* Save Button */}
           <div className="mt-6">
-            <Button className="bg-blue-600 hover:bg-blue-700" onClick={handleSaveSettings}>
+            <Button
+              className="bg-blue-600 hover:bg-blue-700"
+              onClick={handleSaveSettings}
+            >
               <Save className="h-4 w-4 mr-2" />
               Save Settings
             </Button>
@@ -254,5 +302,5 @@ export default function SettingsPage() {
         </main>
       </div>
     </div>
-  )
+  );
 }

@@ -1,13 +1,13 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { useToast } from "@/hooks/use-toast"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+// import { useToast } from "@/hooks/use-toast"
 import {
   FileText,
   Users,
@@ -26,23 +26,32 @@ import {
   ChevronRight,
   ChevronDown,
   Activity,
-} from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { ProjectPhasesModal } from "@/components/project-phases-modal"
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { ProjectPhasesModal } from "@/components/project-phases-modal";
 
 interface SidebarItemProps {
-  icon: React.ReactNode
-  label: string
-  href?: string
-  active?: boolean
-  hasChildren?: boolean
-  expanded?: boolean
-  onClick?: () => void
-  children?: React.ReactNode
+  icon: React.ReactNode;
+  label: string;
+  href?: string;
+  active?: boolean;
+  hasChildren?: boolean;
+  expanded?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
 }
 
-const SidebarItem = ({ icon, label, href, active, hasChildren, expanded, onClick, children }: SidebarItemProps) => {
+const SidebarItem = ({
+  icon,
+  label,
+  href,
+  active,
+  hasChildren,
+  expanded,
+  onClick,
+  children,
+}: SidebarItemProps) => {
   const content = (
     <div
       className={`flex items-center space-x-3 p-2 rounded ${
@@ -52,25 +61,32 @@ const SidebarItem = ({ icon, label, href, active, hasChildren, expanded, onClick
     >
       <div className="w-5 h-5 flex items-center justify-center">{icon}</div>
       <span className="text-sm flex-1">{label}</span>
-      {hasChildren && (expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />)}
+      {hasChildren &&
+        (expanded ? (
+          <ChevronDown className="h-4 w-4" />
+        ) : (
+          <ChevronRight className="h-4 w-4" />
+        ))}
     </div>
-  )
+  );
 
   if (href && !hasChildren) {
     return (
       <Link href={href} className="block">
         {content}
       </Link>
-    )
+    );
   }
 
   return (
     <div>
       {content}
-      {hasChildren && expanded && <div className="pl-4 mt-1 border-l ml-3 space-y-1">{children}</div>}
+      {hasChildren && expanded && (
+        <div className="pl-4 mt-1 border-l ml-3 space-y-1">{children}</div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 const smallDamProjects = [
   {
@@ -109,44 +125,48 @@ const smallDamProjects = [
     type: "Earth Dam",
     technicalSpecs: { height: "8 meters" },
   },
-]
+];
 
 export default function SmallDamsPage() {
-  const pathname = usePathname()
-  const [projects, setProjects] = useState(smallDamProjects)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [expandedItems, setExpandedItems] = useState<string[]>(["project-management"])
-  const [phasesModalOpen, setPhasesModalOpen] = useState(false)
-  const [selectedProject, setSelectedProject] = useState<any>(null)
-  const { toast } = useToast()
+  const pathname = usePathname();
+  const [projects, setProjects] = useState(smallDamProjects);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [expandedItems, setExpandedItems] = useState<string[]>([
+    "project-management",
+  ]);
+  const [phasesModalOpen, setPhasesModalOpen] = useState(false);
+  const [selectedProject, setSelectedProject] = useState<any>(null);
+  // const { toast } = useToast()
 
   const toggleExpand = (item: string) => {
-    setExpandedItems((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
-  }
+    setExpandedItems((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
+    );
+  };
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => pathname === path;
 
   const handleProjectAction = (action: string, project: any) => {
     if (action === "View") {
-      setSelectedProject(project)
-      setPhasesModalOpen(true)
-      toast({
-        title: `${action} Action`,
-        description: `${action} initiated for ${project.name}`,
-      })
+      setSelectedProject(project);
+      setPhasesModalOpen(true);
+      // toast({
+      //   title: `${action} Action`,
+      //   description: `${action} initiated for ${project.name}`,
+      // })
     } else {
-      toast({
-        title: `${action} Action`,
-        description: `${action} initiated for ${project.name}`,
-      })
+      // toast({
+      //   title: `${action} Action`,
+      //   description: `${action} initiated for ${project.name}`,
+      // })
     }
-  }
+  };
 
   const filteredProjects = projects.filter(
     (project) =>
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       project.location.toLowerCase().includes(searchTerm.toLowerCase()),
-  )
+  );
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -157,7 +177,9 @@ export default function SmallDamsPage() {
             <span className="text-blue-600 font-bold text-sm">N</span>
           </div>
           <div>
-            <h1 className="font-semibold">National Water Harvesting & Storage Authority</h1>
+            <h1 className="font-semibold">
+              National Water Harvesting & Storage Authority
+            </h1>
             <p className="text-xs text-blue-100">Project Management System</p>
           </div>
         </div>
@@ -175,7 +197,12 @@ export default function SmallDamsPage() {
           <nav className="p-4">
             <ul className="space-y-2">
               <li>
-                <SidebarItem icon={<Home className="h-4 w-4" />} label="Dashboard" href="/" active={isActive("/")} />
+                <SidebarItem
+                  icon={<Home className="h-4 w-4" />}
+                  label="Dashboard"
+                  href="/"
+                  active={isActive("/")}
+                />
               </li>
               <li>
                 <SidebarItem
@@ -262,8 +289,12 @@ export default function SmallDamsPage() {
         {/* Main Content */}
         <main className="flex-1 p-6">
           <div className="mb-6">
-            <h1 className="text-2xl font-bold text-gray-900">Small Dam Projects</h1>
-            <p className="text-gray-600">Manage community-based small dam projects</p>
+            <h1 className="text-2xl font-bold text-gray-900">
+              Small Dam Projects
+            </h1>
+            <p className="text-gray-600">
+              Manage community-based small dam projects
+            </p>
           </div>
 
           {/* Search and Actions */}
@@ -288,11 +319,16 @@ export default function SmallDamsPage() {
           {/* Projects Grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
             {filteredProjects.map((project) => (
-              <Card key={project.id} className="hover:shadow-lg transition-shadow">
+              <Card
+                key={project.id}
+                className="hover:shadow-lg transition-shadow"
+              >
                 <CardContent className="p-6">
                   <div className="flex justify-between items-start mb-4">
                     <div>
-                      <h3 className="font-semibold text-lg mb-1">{project.name}</h3>
+                      <h3 className="font-semibold text-lg mb-1">
+                        {project.name}
+                      </h3>
                       <p className="text-sm text-gray-600 flex items-center">
                         <MapPin className="h-3 w-3 mr-1" />
                         {project.location}
@@ -363,7 +399,11 @@ export default function SmallDamsPage() {
                         <Edit className="h-3 w-3 mr-1" />
                         Edit
                       </Button>
-                      <Button size="sm" variant="outline" onClick={() => handleProjectAction("Download", project)}>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleProjectAction("Download", project)}
+                      >
                         <Download className="h-3 w-3" />
                       </Button>
                     </div>
@@ -385,5 +425,5 @@ export default function SmallDamsPage() {
         />
       )}
     </div>
-  )
+  );
 }
