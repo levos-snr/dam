@@ -1,13 +1,19 @@
-"use client"
+"use client";
 
-import type React from "react"
+import type React from "react";
 
-import { useState } from "react"
-import { Card, CardContent } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Input } from "@/components/ui/input"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   FileText,
   Users,
@@ -26,25 +32,34 @@ import {
   ChevronRight,
   ChevronDown,
   Activity,
-} from "lucide-react"
-import Link from "next/link"
-import { usePathname } from "next/navigation"
-import { enhancedProjects } from "@/lib/project-data"
-import { ProjectPhasesModal } from "@/components/project-phases-modal"
-import { toast } from "sonner"
+} from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { enhancedProjects } from "@/lib/project-data";
+import { ProjectPhasesModal } from "@/components/project-phases-modal";
+import { toast } from "sonner";
 
 interface SidebarItemProps {
-  icon: React.ReactNode
-  label: string
-  href?: string
-  active?: boolean
-  hasChildren?: boolean
-  expanded?: boolean
-  onClick?: () => void
-  children?: React.ReactNode
+  icon: React.ReactNode;
+  label: string;
+  href?: string;
+  active?: boolean;
+  hasChildren?: boolean;
+  expanded?: boolean;
+  onClick?: () => void;
+  children?: React.ReactNode;
 }
 
-const SidebarItem = ({ icon, label, href, active, hasChildren, expanded, onClick, children }: SidebarItemProps) => {
+const SidebarItem = ({
+  icon,
+  label,
+  href,
+  active,
+  hasChildren,
+  expanded,
+  onClick,
+  children,
+}: SidebarItemProps) => {
   const content = (
     <div
       className={`flex items-center space-x-3 p-2 rounded ${
@@ -54,65 +69,113 @@ const SidebarItem = ({ icon, label, href, active, hasChildren, expanded, onClick
     >
       <div className="w-5 h-5 flex items-center justify-center">{icon}</div>
       <span className="text-sm flex-1">{label}</span>
-      {hasChildren && (expanded ? <ChevronDown className="h-4 w-4" /> : <ChevronRight className="h-4 w-4" />)}
+      {hasChildren &&
+        (expanded ? (
+          <ChevronDown className="h-4 w-4" />
+        ) : (
+          <ChevronRight className="h-4 w-4" />
+        ))}
     </div>
-  )
+  );
 
   if (href && !hasChildren) {
     return (
       <Link href={href} className="block">
         {content}
       </Link>
-    )
+    );
   }
 
   return (
     <div>
       {content}
-      {hasChildren && expanded && <div className="pl-4 mt-1 border-l ml-3 space-y-1">{children}</div>}
+      {hasChildren && expanded && (
+        <div className="pl-4 mt-1 border-l ml-3 space-y-1">{children}</div>
+      )}
     </div>
-  )
-}
+  );
+};
 
 export default function ProjectsPage() {
-  const pathname = usePathname()
-  const [projects, setProjects] = useState(enhancedProjects)
-  const [selectedProject, setSelectedProject] = useState(enhancedProjects[0])
-  const [searchTerm, setSearchTerm] = useState("")
-  const [statusFilter, setStatusFilter] = useState("all")
-  const [phasesModalOpen, setPhasesModalOpen] = useState(false)
-  const [modalMode, setModalMode] = useState<"view" | "edit">("view")
-  const [expandedItems, setExpandedItems] = useState<string[]>(["project-management"])
+  const pathname = usePathname();
+  const [projects, setProjects] = useState(
+    enhancedProjects.map((project) => {
+      // Logic for approval status based on project state
+      let approvalStatus: "approved" | "pending" | "rejected";
+
+      if (
+        project.overallProgress === 0 ||
+        project.status === "Planning Phase"
+      ) {
+        // Projects in early stages could be pending or rejected
+        approvalStatus = Math.random() > 0.7 ? "rejected" : "pending";
+      } else if (project.overallProgress > 0 && project.overallProgress < 30) {
+        // Projects with some progress are likely approved but could be pending
+        approvalStatus = Math.random() > 0.8 ? "pending" : "approved";
+      } else {
+        // Projects with significant progress must be approved
+        approvalStatus = "approved";
+      }
+
+      // If rejected, reset progress and set appropriate status
+      if (approvalStatus === "rejected") {
+        return {
+          ...project,
+          approvalStatus,
+          overallProgress: 0,
+          status: "Rejected",
+          currentPhase: "Project Rejected - Awaiting Review",
+        };
+      }
+
+      return {
+        ...project,
+        approvalStatus,
+      };
+    }),
+  );
+  const [selectedProject, setSelectedProject] = useState(enhancedProjects[0]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [statusFilter, setStatusFilter] = useState("all");
+  const [phasesModalOpen, setPhasesModalOpen] = useState(false);
+  const [modalMode, setModalMode] = useState<"view" | "edit">("view");
+  const [expandedItems, setExpandedItems] = useState<string[]>([
+    "project-management",
+  ]);
 
   const toggleExpand = (item: string) => {
-    setExpandedItems((prev) => (prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item]))
-  }
+    setExpandedItems((prev) =>
+      prev.includes(item) ? prev.filter((i) => i !== item) : [...prev, item],
+    );
+  };
 
-  const isActive = (path: string) => pathname === path
+  const isActive = (path: string) => pathname === path;
 
   const handleProjectAction = (action: string, project: any) => {
-    setSelectedProject(project)
+    setSelectedProject(project);
 
     if (action === "View") {
-      setModalMode("view")
-      setPhasesModalOpen(true)
-      toast.success(`Viewing phases for ${project.name}`)
+      setModalMode("view");
+      setPhasesModalOpen(true);
+      toast.success(`Viewing phases for ${project.name}`);
     } else if (action === "Edit") {
-      setModalMode("edit")
-      setPhasesModalOpen(true)
-      toast.success(`Editing phases for ${project.name}`)
+      setModalMode("edit");
+      setPhasesModalOpen(true);
+      toast.success(`Editing phases for ${project.name}`);
     } else if (action === "Download") {
-      toast.success(`Downloading project data for ${project.name}`)
+      toast.success(`Downloading project data for ${project.name}`);
     }
-  }
+  };
 
   const filteredProjects = projects.filter((project) => {
     const matchesSearch =
       project.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      project.location.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesStatus = statusFilter === "all" || project.status.toLowerCase().includes(statusFilter.toLowerCase())
-    return matchesSearch && matchesStatus
-  })
+      project.location.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesStatus =
+      statusFilter === "all" ||
+      project.status.toLowerCase().includes(statusFilter.toLowerCase());
+    return matchesSearch && matchesStatus;
+  });
 
   return (
     <div className="min-h-screen bg-gray-100">
@@ -123,7 +186,9 @@ export default function ProjectsPage() {
             <span className="text-blue-600 font-bold text-sm">N</span>
           </div>
           <div>
-            <h1 className="font-semibold">National Water Harvesting & Storage Authority</h1>
+            <h1 className="font-semibold">
+              National Water Harvesting & Storage Authority
+            </h1>
             <p className="text-xs text-blue-100">Project Management System</p>
           </div>
         </div>
@@ -141,7 +206,12 @@ export default function ProjectsPage() {
           <nav className="p-4 h-full overflow-y-auto">
             <ul className="space-y-2">
               <li>
-                <SidebarItem icon={<Home className="h-4 w-4" />} label="Dashboard" href="/" active={isActive("/")} />
+                <SidebarItem
+                  icon={<Home className="h-4 w-4" />}
+                  label="Dashboard"
+                  href="/"
+                  active={isActive("/")}
+                />
               </li>
               <li>
                 <SidebarItem
@@ -230,8 +300,12 @@ export default function ProjectsPage() {
           <div className="p-6">
             {/* Page Header */}
             <div className="mb-6">
-              <h1 className="text-2xl font-bold text-gray-900">Large Dam Projects</h1>
-              <p className="text-gray-600">Manage and monitor large dam construction projects across Kenya</p>
+              <h1 className="text-2xl font-bold text-gray-900">
+                Large Dam Projects
+              </h1>
+              <p className="text-gray-600">
+                Manage and monitor large dam construction projects across Kenya
+              </p>
             </div>
 
             {/* Filters and Search */}
@@ -270,44 +344,88 @@ export default function ProjectsPage() {
             {/* Projects Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredProjects.map((project) => (
-                <Card key={project.id} className="hover:shadow-lg transition-shadow">
+                <Card
+                  key={project.id}
+                  className="hover:shadow-lg transition-shadow"
+                >
                   <CardContent className="p-6">
-                    <div className="flex justify-between items-start mb-4">
+                    <div className="flex items-center justify-between mb-4">
                       <div>
-                        <h3 className="font-semibold text-lg mb-1">{project.name}</h3>
+                        <h3 className="font-semibold text-lg mb-1">
+                          {project.name}
+                        </h3>
                         <p className="text-sm text-gray-600 flex items-center">
                           <MapPin className="h-3 w-3 mr-1" />
                           {project.location} • {project.river}
                         </p>
                       </div>
-                      <Badge
-                        variant={
-                          project.status === "Construction Phase"
-                            ? "default"
-                            : project.status === "Near Completion"
-                              ? "secondary"
-                              : project.status === "Design Phase"
-                                ? "outline"
-                                : "outline"
-                        }
-                      >
-                        {project.status}
-                      </Badge>
+                      <div className="flex flex-col gap-2">
+                        <Badge
+                          variant={
+                            project.status === "Construction Phase"
+                              ? "default"
+                              : project.status === "Near Completion"
+                                ? "secondary"
+                                : project.status === "Design Phase"
+                                  ? "outline"
+                                  : "outline"
+                          }
+                        >
+                          {project.status}
+                        </Badge>
+                        <Badge
+                          variant={
+                            project.approvalStatus === "approved"
+                              ? "default"
+                              : project.approvalStatus === "pending"
+                                ? "secondary"
+                                : "destructive"
+                          }
+                          className={
+                            project.approvalStatus === "approved"
+                              ? "bg-green-100 text-green-800 hover:bg-green-100"
+                              : project.approvalStatus === "pending"
+                                ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                                : "bg-red-100 text-red-800 hover:bg-red-100"
+                          }
+                        >
+                          {project.approvalStatus === "approved"
+                            ? "Approved"
+                            : project.approvalStatus === "pending"
+                              ? "Pending"
+                              : "Rejected"}
+                        </Badge>
+                      </div>
                     </div>
 
                     <div className="space-y-3">
-                      <div>
-                        <div className="flex justify-between text-sm mb-1">
-                          <span className="text-gray-600">Overall Progress</span>
-                          <span className="font-medium">{project.overallProgress}%</span>
+                      {project.approvalStatus !== "rejected" ? (
+                        <div>
+                          <div className="flex justify-between text-sm mb-1">
+                            <span className="text-gray-600">
+                              Overall Progress
+                            </span>
+                            <span className="font-medium">
+                              {project.overallProgress}%
+                            </span>
+                          </div>
+                          <div className="w-full bg-gray-200 rounded-full h-2">
+                            <div
+                              className="bg-blue-600 h-2 rounded-full transition-all"
+                              style={{ width: `${project.overallProgress}%` }}
+                            ></div>
+                          </div>
                         </div>
-                        <div className="w-full bg-gray-200 rounded-full h-2">
-                          <div
-                            className="bg-blue-600 h-2 rounded-full transition-all"
-                            style={{ width: `${project.overallProgress}%` }}
-                          ></div>
+                      ) : (
+                        <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                          <p className="text-sm text-red-700 font-medium">
+                            Project Rejected
+                          </p>
+                          <p className="text-xs text-red-600">
+                            No active progress - Awaiting review
+                          </p>
                         </div>
-                      </div>
+                      )}
 
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div>
@@ -316,22 +434,34 @@ export default function ProjectsPage() {
                         </div>
                         <div>
                           <p className="text-gray-600">Height</p>
-                          <p className="font-medium">{project.technicalSpecs.height}</p>
+                          <p className="font-medium">
+                            {project.technicalSpecs.height}
+                          </p>
                         </div>
                         <div>
                           <p className="text-gray-600">Capacity</p>
-                          <p className="font-medium">{project.technicalSpecs.capacity}</p>
+                          <p className="font-medium">
+                            {project.technicalSpecs.capacity}
+                          </p>
                         </div>
                         <div>
                           <p className="text-gray-600">Type</p>
-                          <p className="font-medium">{project.damType.split(" ")[0]}</p>
+                          <p className="font-medium">
+                            {project.damType.split(" ")[0]}
+                          </p>
                         </div>
                       </div>
 
-                      <div className="pt-3 border-t">
-                        <p className="text-xs text-gray-600 mb-2">Current Phase</p>
-                        <p className="text-sm font-medium">{project.currentPhase}</p>
-                      </div>
+                      {project.approvalStatus !== "rejected" && (
+                        <div className="pt-3 border-t">
+                          <p className="text-xs text-gray-600 mb-2">
+                            Current Phase
+                          </p>
+                          <p className="text-sm font-medium">
+                            {project.currentPhase}
+                          </p>
+                        </div>
+                      )}
 
                       <div className="flex space-x-2 pt-3">
                         <Button
@@ -339,6 +469,7 @@ export default function ProjectsPage() {
                           variant="outline"
                           className="flex-1"
                           onClick={() => handleProjectAction("View", project)}
+                          disabled={project.approvalStatus === "rejected"}
                         >
                           <Eye className="h-3 w-3 mr-1" />
                           View
@@ -348,11 +479,19 @@ export default function ProjectsPage() {
                           variant="outline"
                           className="flex-1"
                           onClick={() => handleProjectAction("Edit", project)}
+                          disabled={project.approvalStatus === "rejected"}
                         >
                           <Edit className="h-3 w-3 mr-1" />
                           Edit
                         </Button>
-                        <Button size="sm" variant="outline" onClick={() => handleProjectAction("Download", project)}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          onClick={() =>
+                            handleProjectAction("Download", project)
+                          }
+                          disabled={project.approvalStatus === "rejected"}
+                        >
                           <Download className="h-3 w-3" />
                         </Button>
                       </div>
@@ -373,5 +512,5 @@ export default function ProjectsPage() {
         mode={modalMode}
       />
     </div>
-  )
+  );
 }

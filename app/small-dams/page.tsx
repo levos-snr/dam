@@ -7,7 +7,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
-// import { useToast } from "@/hooks/use-toast"
+// import { useToast } from "@/hooks/use-toast";
 import {
   FileText,
   Users,
@@ -100,6 +100,7 @@ const smallDamProjects = [
     cost: "KES 15M",
     type: "Earth Dam",
     technicalSpecs: { height: "12 meters" },
+    approvalStatus: "approved", // Completed projects must be approved
   },
   {
     id: "SDP002",
@@ -112,6 +113,7 @@ const smallDamProjects = [
     cost: "KES 22M",
     type: "Rock Fill Dam",
     technicalSpecs: { height: "10 meters" },
+    approvalStatus: "approved", // Construction projects must be approved
   },
   {
     id: "SDP003",
@@ -124,6 +126,20 @@ const smallDamProjects = [
     cost: "KES 12M",
     type: "Earth Dam",
     technicalSpecs: { height: "8 meters" },
+    approvalStatus: "pending", // Planning phase projects are pending
+  },
+  {
+    id: "SDP004",
+    name: "Makueni Community Dam",
+    location: "Makueni County",
+    status: "Rejected",
+    progress: 0,
+    capacity: "25,000 m³",
+    beneficiaries: "200 households",
+    cost: "KES 8M",
+    type: "Earth Dam",
+    technicalSpecs: { height: "6 meters" },
+    approvalStatus: "rejected", // New rejected project with 0 progress
   },
 ];
 
@@ -136,7 +152,7 @@ export default function SmallDamsPage() {
   ]);
   const [phasesModalOpen, setPhasesModalOpen] = useState(false);
   const [selectedProject, setSelectedProject] = useState<any>(null);
-  // const { toast } = useToast()
+  // const { toast } = useToast();
 
   const toggleExpand = (item: string) => {
     setExpandedItems((prev) =>
@@ -153,12 +169,12 @@ export default function SmallDamsPage() {
       // toast({
       //   title: `${action} Action`,
       //   description: `${action} initiated for ${project.name}`,
-      // })
+      // });
     } else {
       // toast({
       //   title: `${action} Action`,
       //   description: `${action} initiated for ${project.name}`,
-      // })
+      // });
     }
   };
 
@@ -334,32 +350,69 @@ export default function SmallDamsPage() {
                         {project.location}
                       </p>
                     </div>
-                    <Badge
-                      variant={
-                        project.status === "Completed"
-                          ? "default"
-                          : project.status === "Construction"
-                            ? "secondary"
-                            : "outline"
-                      }
-                    >
-                      {project.status}
-                    </Badge>
+                    <div className="flex flex-col gap-2">
+                      <Badge
+                        variant={
+                          project.status === "Completed"
+                            ? "default"
+                            : project.status === "Construction"
+                              ? "secondary"
+                              : "outline"
+                        }
+                      >
+                        {project.status}
+                      </Badge>
+                      <Badge
+                        variant={
+                          project.approvalStatus === "approved"
+                            ? "default"
+                            : project.approvalStatus === "pending"
+                              ? "secondary"
+                              : "destructive"
+                        }
+                        className={
+                          project.approvalStatus === "approved"
+                            ? "bg-green-100 text-green-800 hover:bg-green-100"
+                            : project.approvalStatus === "pending"
+                              ? "bg-yellow-100 text-yellow-800 hover:bg-yellow-100"
+                              : "bg-red-100 text-red-800 hover:bg-red-100"
+                        }
+                      >
+                        {project.approvalStatus === "approved"
+                          ? "Approved"
+                          : project.approvalStatus === "pending"
+                            ? "Pending"
+                            : "Rejected"}
+                      </Badge>
+                    </div>
                   </div>
 
                   <div className="space-y-3">
-                    <div>
-                      <div className="flex justify-between text-sm mb-1">
-                        <span className="text-gray-600">Progress</span>
-                        <span className="font-medium">{project.progress}%</span>
+                    {project.approvalStatus !== "rejected" ? (
+                      <div>
+                        <div className="flex justify-between text-sm mb-1">
+                          <span className="text-gray-600">Progress</span>
+                          <span className="font-medium">
+                            {project.progress}%
+                          </span>
+                        </div>
+                        <div className="w-full bg-gray-200 rounded-full h-2">
+                          <div
+                            className="bg-blue-600 h-2 rounded-full transition-all"
+                            style={{ width: `${project.progress}%` }}
+                          ></div>
+                        </div>
                       </div>
-                      <div className="w-full bg-gray-200 rounded-full h-2">
-                        <div
-                          className="bg-blue-600 h-2 rounded-full transition-all"
-                          style={{ width: `${project.progress}%` }}
-                        ></div>
+                    ) : (
+                      <div className="p-3 bg-red-50 rounded-lg border border-red-200">
+                        <p className="text-sm text-red-700 font-medium">
+                          Project Rejected
+                        </p>
+                        <p className="text-xs text-red-600">
+                          No active progress - Awaiting review
+                        </p>
                       </div>
-                    </div>
+                    )}
 
                     <div className="grid grid-cols-2 gap-4 text-sm">
                       <div>
@@ -386,6 +439,7 @@ export default function SmallDamsPage() {
                         variant="outline"
                         className="flex-1"
                         onClick={() => handleProjectAction("View", project)}
+                        disabled={project.approvalStatus === "rejected"}
                       >
                         <Eye className="h-3 w-3 mr-1" />
                         View
@@ -395,6 +449,7 @@ export default function SmallDamsPage() {
                         variant="outline"
                         className="flex-1"
                         onClick={() => handleProjectAction("Edit", project)}
+                        disabled={project.approvalStatus === "rejected"}
                       >
                         <Edit className="h-3 w-3 mr-1" />
                         Edit
@@ -403,6 +458,7 @@ export default function SmallDamsPage() {
                         size="sm"
                         variant="outline"
                         onClick={() => handleProjectAction("Download", project)}
+                        disabled={project.approvalStatus === "rejected"}
                       >
                         <Download className="h-3 w-3" />
                       </Button>
